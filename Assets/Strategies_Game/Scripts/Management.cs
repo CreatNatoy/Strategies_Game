@@ -1,10 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Management : MonoBehaviour
 {
     [SerializeField] private Camera _camera;
     [SerializeField] private SelectableObject _howered;
+    [SerializeField] private Image _frameImage;
+
+    private Vector2 _frameStart;
+    private Vector2 _frameEnd; 
 
     private List<SelectableObject> _listOfSelected = new List<SelectableObject>();
 
@@ -19,7 +24,7 @@ public class Management : MonoBehaviour
                 Select();
             }
 
-            if (hit.collider.tag == "Ground") {
+            if (hit.collider.CompareTag("Ground")) {
                 foreach (var selectable in _listOfSelected)
                     selectable.WhenClickOnGround(hit.point);
             }
@@ -27,6 +32,32 @@ public class Management : MonoBehaviour
 
         if (Input.GetMouseButtonUp(1)) {
             UnselectAll();
+        }
+
+        HandlerFrameSelected();
+    }
+
+    private void HandlerFrameSelected() {
+        if (Input.GetMouseButtonDown(0)) {
+            _frameStart = Input.mousePosition;
+        }
+
+        if (Input.GetMouseButton(0)) {
+            _frameImage.enabled = true;
+
+            _frameEnd = Input.mousePosition;
+
+            var min = Vector2.Min(_frameStart, _frameEnd);
+            var max = Vector2.Max(_frameStart, _frameEnd);
+
+            _frameImage.rectTransform.anchoredPosition = min;
+
+            var size = max - min;
+            _frameImage.rectTransform.sizeDelta = size;
+        }
+
+        if (Input.GetMouseButtonUp(0)) {
+            _frameImage.enabled = false;
         }
     }
 
@@ -72,8 +103,8 @@ public class Management : MonoBehaviour
     }
 
     private void UnselectAll() {
-        for (var i = 0; i < _listOfSelected.Count; i++) {
-            _listOfSelected[i].Unselect();
+        foreach (var selectable in _listOfSelected) {
+            selectable.Unselect();
         }
 
         _listOfSelected.Clear();
