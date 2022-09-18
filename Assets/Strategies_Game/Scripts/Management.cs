@@ -10,13 +10,18 @@ public class Management : MonoBehaviour
 
     private void Update() {
         
-        RaycastToSelectable();
+        RaycastToSelectable(out var hit);
 
         if (Input.GetMouseButtonUp(0)) {
             if (_howered) {
                 if (Input.GetKey(KeyCode.LeftControl) == false)
                     UnselectAll();
                 Select();
+            }
+
+            if (hit.collider.tag == "Ground") {
+                foreach (var selectable in _listOfSelected)
+                    selectable.WhenClickOnGround(hit.point);
             }
         }
 
@@ -25,11 +30,11 @@ public class Management : MonoBehaviour
         }
     }
 
-    private void RaycastToSelectable() {
+    private void RaycastToSelectable(out RaycastHit hit) {
         var ray = _camera.ScreenPointToRay(Input.mousePosition);
         Debug.DrawRay(ray.origin, ray.direction * 10f, Color.red);
 
-        if (Physics.Raycast(ray, out var hit)) {
+        if (Physics.Raycast(ray, out hit)) {
             var selectableCollider = hit.collider.GetComponent<SelectableCollider>();
 
             if (selectableCollider != null) {
