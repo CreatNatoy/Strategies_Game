@@ -2,32 +2,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum SelectionState
+{
+    UnitsSelected,
+    Frame,
+    Other
+}
+
 public class Management : MonoBehaviour
 {
     [SerializeField] private Camera _camera;
-    [SerializeField] private SelectableObject _howered;
     [SerializeField] private Image _frameImage;
 
+    private SelectableObject _hovered;
     private Vector2 _frameStart;
-    private Vector2 _frameEnd; 
-
+    private Vector2 _frameEnd;
     private List<SelectableObject> _listOfSelected = new List<SelectableObject>();
 
+   [SerializeField] private SelectionState _currentSelectionState; 
+
     private void Update() {
-        
         RaycastToSelectable(out var hit);
 
         if (Input.GetMouseButtonUp(0)) {
-            if (_howered) {
+            if (_hovered) {
                 if (Input.GetKey(KeyCode.LeftControl) == false)
                     UnselectAll();
-                Select();
+                _currentSelectionState = SelectionState.UnitsSelected; 
+                Select(_hovered);
             }
 
-            if (hit.collider.CompareTag("Ground")) {
-                foreach (var selectable in _listOfSelected)
-                    selectable.WhenClickOnGround(hit.point);
+            if (_currentSelectionState == SelectionState.UnitsSelected) {
+                if (hit.collider.CompareTag("Ground")) {
+                    foreach (var selectable in _listOfSelected)
+                        selectable.WhenClickOnGround(hit.point);
+                }
             }
+
         }
 
         if (Input.GetMouseButtonUp(1)) {
@@ -43,21 +54,45 @@ public class Management : MonoBehaviour
         }
 
         if (Input.GetMouseButton(0)) {
-            _frameImage.enabled = true;
-
             _frameEnd = Input.mousePosition;
 
             var min = Vector2.Min(_frameStart, _frameEnd);
             var max = Vector2.Max(_frameStart, _frameEnd);
+            var size = max - min;
+
+            if (size.magnitude < 10) return;
+            _frameImage.enabled = true;
 
             _frameImage.rectTransform.anchoredPosition = min;
 
-            var size = max - min;
             _frameImage.rectTransform.sizeDelta = size;
+
+            var rect = new Rect(min, size);
+
+            UnselectAll();
+            SelectObjectToFrame(rect);
+            _currentSelectionState = SelectionState.Frame;
         }
 
         if (Input.GetMouseButtonUp(0)) {
             _frameImage.enabled = false;
+            if (_listOfSelected.Count > 0) {
+                _currentSelectionState = SelectionState.UnitsSelected;
+            }
+            else {
+                _currentSelectionState = SelectionState.Other; 
+            }
+        }
+    }
+
+    private void SelectObjectToFrame(Rect rect) {
+        // Remove the Find method 
+        var allUnits = FindObjectsOfType<Unit>();
+        foreach (var unit in allUnits) {
+            var screenPosition = _camera.WorldToScreenPoint(unit.transform.position);
+            if (rect.Contains(screenPosition)) {
+                Select(unit);
+            }
         }
     }
 
@@ -71,9 +106,9 @@ public class Management : MonoBehaviour
             if (selectableCollider != null) {
                 var hitSelectable = selectableCollider.SelectableObject;
 
-                if (_howered) {
-                    if (_howered != hitSelectable) {
-                        _howered.OnUnhover();
+                if (_hovered) {
+                    if (_hovered != hitSelectable) {
+                        _hovered.OnUnhover();
                         OnHover(hitSelectable);
                     }
                 }
@@ -91,14 +126,14 @@ public class Management : MonoBehaviour
     }
 
     private void OnHover(SelectableObject hitSelectable) {
-        _howered = hitSelectable;
-        _howered.OnHover();
+        _hovered = hitSelectable;
+        _hovered.OnHover();
     }
 
-    private void Select() {
-        if (!_listOfSelected.Contains(_howered)) {
-            _listOfSelected.Add(_howered);
-            _howered.Select();
+    private void Select(SelectableObject selectableObject) {
+        if (!_listOfSelected.Contains(selectableObject)) {
+            _listOfSelected.Add(selectableObject);
+            selectableObject.Select();
         }
     }
 
@@ -106,14 +141,15 @@ public class Management : MonoBehaviour
         foreach (var selectable in _listOfSelected) {
             selectable.Unselect();
         }
+        _currentSelectionState = SelectionState.Other; 
 
         _listOfSelected.Clear();
     }
 
     private void UnhoverCurrent() {
-        if (_howered) {
-            _howered.OnUnhover();
-            _howered = null;
+        if (_hovered) {
+            _hovered.OnUnhover();
+            _hovered = null;
         }
     }
 }
