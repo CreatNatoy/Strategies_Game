@@ -88,6 +88,7 @@ public class Management : MonoBehaviour
     private void SelectObjectToFrame(Rect rect) {
         // Remove the Find method 
         var allUnits = FindObjectsOfType<Unit>();
+        
         foreach (var unit in allUnits) {
             var screenPosition = _camera.WorldToScreenPoint(unit.transform.position);
             if (rect.Contains(screenPosition)) {
