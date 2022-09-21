@@ -6,6 +6,8 @@ public class Building : SelectableObject
     [SerializeField] private int _xSize = 3;
     [SerializeField] private int _zSize = 3;
 
+    public int Price => _price; 
+    
     private void OnDrawGizmos() {
         var cellSize = BuildingPlacer.CellSize; 
         for (var x = 0; x < _xSize; x++) {
