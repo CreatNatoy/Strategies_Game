@@ -29,8 +29,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2425763915414389575}
   - {fileID: 5611833350154867340}
+  - {fileID: 2425763915414389575}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -51,6 +51,7 @@ MonoBehaviour:
   _price: 5
   _xSize: 2
   _zSize: 2
+  _renderer: {fileID: 6657338384230907402}
 --- !u!1 &4308668833231476843
 GameObject:
   m_ObjectHideFlags: 0
@@ -83,7 +84,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2443959333057369287}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &2822794233950473384
 MeshFilter:
@@ -158,7 +159,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 8a6f6b8111c64ec44b42a49cdf13832b, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8a6f6b8111c64ec44b42a49cdf13832b, type: 3}
       propertyPath: m_LocalScale.x
@@ -229,5 +230,10 @@ PrefabInstance:
 --- !u!4 &5611833350154867340 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8a6f6b8111c64ec44b42a49cdf13832b, type: 3}
+  m_PrefabInstance: {fileID: 5362526907568403815}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6657338384230907402 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7635826562936255635, guid: 8a6f6b8111c64ec44b42a49cdf13832b, type: 3}
   m_PrefabInstance: {fileID: 5362526907568403815}
   m_PrefabAsset: {fileID: 0}
