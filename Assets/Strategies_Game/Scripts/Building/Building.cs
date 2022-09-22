@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Building : SelectableObject
@@ -6,7 +5,8 @@ public class Building : SelectableObject
     [SerializeField] private int _price;
     [SerializeField] private int _xSize = 3;
     [SerializeField] private int _zSize = 3;
-    [SerializeField] private Renderer _renderer; 
+    [SerializeField] private Renderer _renderer;
+    
     
     private Color _startColor;
     public int XSize => _xSize;
