@@ -16,7 +16,11 @@ public class Barack : Building
     }
 
     public void CreateUnit(Unit unitPrefab) {
-        Instantiate(unitPrefab, _spawnTransform.position, Quaternion.identity); 
+        var spawnPosition = _spawnTransform.position;
+        var newUnit = Instantiate(unitPrefab, spawnPosition, Quaternion.identity);
+       var position = spawnPosition +
+                          new Vector3(Random.Range(-2f, 2f), 0f, Random.Range(-2f, 2f));
+       newUnit.WhenClickOnGround(position);
     }
     
 }

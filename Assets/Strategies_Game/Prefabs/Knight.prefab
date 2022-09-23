@@ -244,6 +244,8 @@ MonoBehaviour:
   _selectionIndicator: {fileID: 3284778584934514599}
   _scaleObject: 1.1
   _navMeshAgent: {fileID: 1635940456111041517}
+  _price: 5
+  _health: 5
 --- !u!195 &1635940456111041517
 NavMeshAgent:
   m_ObjectHideFlags: 0
