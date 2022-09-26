@@ -246,6 +246,7 @@ MonoBehaviour:
   _navMeshAgent: {fileID: 1635940456111041517}
   _price: 5
   _health: 5
+  _healthBarPrefab: {fileID: 3079300989541850726, guid: f188a95206090a343832c045289b45a8, type: 3}
 --- !u!195 &1635940456111041517
 NavMeshAgent:
   m_ObjectHideFlags: 0
