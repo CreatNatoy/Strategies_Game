@@ -39,8 +39,18 @@ public class Management : MonoBehaviour
 
             if (_currentSelectionState == SelectionState.UnitsSelected) {
                 if (hit.collider.CompareTag("Ground")) {
-                    foreach (var selectable in _listOfSelected)
-                        selectable.WhenClickOnGround(hit.point);
+
+                    var rowNumber = Mathf.CeilToInt(Mathf.Sqrt(_listOfSelected.Count));
+                    
+                    for (var i = 0; i < _listOfSelected.Count; i++) {
+                        
+                        var row = i / rowNumber;
+                        var column = i % rowNumber; 
+                        
+                        var point = hit.point + new Vector3(row, 0f, column);
+                        
+                        _listOfSelected[i].WhenClickOnGround(point);
+                    }
                 }
             }
 
