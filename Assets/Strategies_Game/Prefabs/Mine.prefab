@@ -243,6 +243,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _selectableObject: {fileID: 3523322668941391027}
+--- !u!208 &7772962964232083793
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4262419544975929583}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.3, y: 0.25, z: 0.3}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.1, y: 0.25, z: 0.1}
+  m_TimeToStationary: 0.5
 --- !u!4 &5611833350154867340 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8a6f6b8111c64ec44b42a49cdf13832b, type: 3}

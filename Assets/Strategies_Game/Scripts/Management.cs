@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,9 +20,13 @@ public class Management : MonoBehaviour
     private Vector2 _frameEnd;
     private List<SelectableObject> _listOfSelected = new List<SelectableObject>();
 
-   [SerializeField] private SelectionState _currentSelectionState; 
+   [SerializeField] private SelectionState _currentSelectionState;
 
-    private void Update() {
+   private void Awake() {
+       ServiceLocator.Instance.Register(this);
+   }
+
+   private void Update() {
         RaycastToSelectable(out var hit);
 
         if (Input.GetMouseButtonUp(0)) {
@@ -135,6 +140,12 @@ public class Management : MonoBehaviour
         if (!_listOfSelected.Contains(selectableObject)) {
             _listOfSelected.Add(selectableObject);
             selectableObject.Select();
+        }
+    }
+
+    public void Unselect(SelectableObject selectableObject) {
+        if (_listOfSelected.Contains(selectableObject)) {
+            _listOfSelected.Remove(selectableObject);
         }
     }
 

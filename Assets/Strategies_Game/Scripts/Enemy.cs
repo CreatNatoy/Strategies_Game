@@ -64,9 +64,10 @@ public class Enemy : MonoBehaviour
 
                 break;
             case EnemyState.Attack:
-                _navMeshAgent.SetDestination(_targetUnit.transform.position);
 
                 if (_targetUnit) {
+                    _navMeshAgent.SetDestination(_targetUnit.transform.position);
+
                     var distance = Vector3.Distance(transform.position, _targetUnit.transform.position);
                     if (distance > _distanceToAttack) {
                         SetState(EnemyState.WalkToUnit);
@@ -96,7 +97,9 @@ public class Enemy : MonoBehaviour
                 break;
             case EnemyState.WalkToBuilding:
                 FindClosestBuilding();
-                _navMeshAgent.SetDestination(_targetBuilding.transform.position);
+                if (_targetBuilding) {
+                    _navMeshAgent.SetDestination(_targetBuilding.transform.position);
+                }
                 break;
             case EnemyState.WalkToUnit:
                 break;

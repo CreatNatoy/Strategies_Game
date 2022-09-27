@@ -49,9 +49,10 @@ public class Knight : Unit
     
                     break;
                 case UnitState.Attack:
-                    _navMeshAgent.SetDestination(_targetEnemy.transform.position);
 
                     if (_targetEnemy) {
+                        _navMeshAgent.SetDestination(_targetEnemy.transform.position);
+
                         var distance = Vector3.Distance(transform.position, _targetEnemy.transform.position);
                         if (distance > _distanceToAttack) {
                             SetState(UnitState.WalkToEnemy);
