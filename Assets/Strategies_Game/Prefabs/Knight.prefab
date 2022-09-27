@@ -247,6 +247,10 @@ MonoBehaviour:
   _price: 5
   _health: 5
   _healthBarPrefab: {fileID: 3079300989541850726, guid: f188a95206090a343832c045289b45a8, type: 3}
+  _distanceToFollow: 7
+  _distanceToAttack: 1
+  _attackPeriod: 1
+  _damage: 1
 --- !u!195 &1635940456111041517
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -258,7 +262,7 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.25
   m_Speed: 3.5
-  m_Acceleration: 8
+  m_Acceleration: 50
   avoidancePriority: 50
   m_AngularSpeed: 600
   m_StoppingDistance: 1

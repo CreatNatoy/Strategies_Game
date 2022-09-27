@@ -19,11 +19,19 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _distanceToAttack = 1f;
     [SerializeField] private float _attackPeriod = 1f;
     [SerializeField] private int _damage = 1;
+    [SerializeField] private HealthBar _healthBarPrefab;
 
+    private int _maxHealth; 
     private EnemyState _currentEnemyState;
     private Building _targetBuilding;
     private Unit _targetUnit;
     private float _timer;
+
+    private void Start() {
+        _maxHealth = _health; 
+        _healthBarPrefab = Instantiate(_healthBarPrefab);
+        _healthBarPrefab.Setup(transform);
+    }
 
     private void Update() {
         switch (_currentEnemyState) {
@@ -56,6 +64,7 @@ public class Enemy : MonoBehaviour
 
                 break;
             case EnemyState.Attack:
+                _navMeshAgent.SetDestination(_targetUnit.transform.position);
 
                 if (_targetUnit) {
                     var distance = Vector3.Distance(transform.position, _targetUnit.transform.position);
@@ -131,6 +140,14 @@ public class Enemy : MonoBehaviour
 
         if (minDistance < _distanceToFollow) {
             SetState(EnemyState.WalkToUnit);
+        }
+    }
+    
+    public void TakeDamage(int damageValue) {
+        _health -= damageValue;
+        _healthBarPrefab.SetHealth(_health,_maxHealth);
+        if (_health <= 0) {
+            Destroy(gameObject);
         }
     }
 

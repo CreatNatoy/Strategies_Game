@@ -3,7 +3,7 @@ using UnityEngine.AI;
 
 public class Unit : SelectableObject
 {
-    [SerializeField] private NavMeshAgent _navMeshAgent;
+    public NavMeshAgent _navMeshAgent;
     [SerializeField] private int _price = 5;
     [SerializeField] private int _health;
     [SerializeField] private HealthBar _healthBarPrefab;
