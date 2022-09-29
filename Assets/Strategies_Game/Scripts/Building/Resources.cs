@@ -13,5 +13,14 @@ public class Resources : MonoBehaviour
         _serviceLocator.Register(this); 
     }
 
-    public void SpendMoney(int spendMoney) => _money -= spendMoney;
+    private void Start() {
+        PrintMoney();
+    }
+
+    public void SpendMoney(int spendMoney) {
+        _money -= spendMoney;
+        PrintMoney();
+    } 
+
+    private void PrintMoney() => EventManager.PrintCoin(_money); 
 }

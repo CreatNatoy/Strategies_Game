@@ -31,6 +31,10 @@ public class CameraMove : MonoBehaviour
             transform.position = _cameraStartPosition - offset;
         }
 
+        if (Input.GetMouseButtonUp(2)) {
+            CopyTransformCameraToRaycastCamera();
+        }
+
         var mouseScrollDelta = Input.mouseScrollDelta.y;
         transform.Translate(0f, 0f, mouseScrollDelta);
         _raycastCamera.transform.Translate(0f, 0f, mouseScrollDelta);
@@ -44,5 +48,11 @@ public class CameraMove : MonoBehaviour
         var point = ray.GetPoint(distance);
 
         return point;
+    }
+
+    private void CopyTransformCameraToRaycastCamera() {
+        _raycastCamera.transform.position = transform.position;
+        _raycastCamera.transform.rotation = transform.rotation;
+        _raycastCamera.transform.localScale = transform.localScale; 
     }
 }
