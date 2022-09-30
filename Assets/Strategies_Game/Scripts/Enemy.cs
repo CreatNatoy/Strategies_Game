@@ -26,11 +26,14 @@ public class Enemy : MonoBehaviour
     private Building _targetBuilding;
     private Unit _targetUnit;
     private float _timer;
+    private CreatorUnit _creatorUnit;
 
     private void Start() {
         _maxHealth = _health; 
         _healthBarPrefab = Instantiate(_healthBarPrefab);
         _healthBarPrefab.Setup(transform);
+        
+        _creatorUnit = ServiceLocator.Instance.Get<CreatorUnit>();
     }
 
     private void Update() {
@@ -132,9 +135,8 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void FindClosestUnit() {
-        // Remove the method Find
-        var allUnits = FindObjectsOfType<Unit>();
+    private void FindClosestUnit() {
+        var allUnits = _creatorUnit.GetAllActivateKnight();
 
         var minDistance = Mathf.Infinity;
 

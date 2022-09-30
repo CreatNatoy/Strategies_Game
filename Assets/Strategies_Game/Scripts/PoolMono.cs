@@ -52,4 +52,8 @@ public class PoolMono<T> where T : MonoBehaviour
 
         throw new Exception($"There is no free elements in pool of {typeof(T)}");
     }
+
+    public List<T> GetAllActiveElements() {
+        return _pool.FindAll(p => p.gameObject.activeInHierarchy);
+    }
 }

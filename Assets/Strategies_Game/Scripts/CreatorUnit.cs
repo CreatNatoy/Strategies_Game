@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CreatorUnit : MonoBehaviour
@@ -20,5 +21,7 @@ public class CreatorUnit : MonoBehaviour
         _poolMonoKnight = new PoolMono<Unit>(_prefabKnight, _intCountKnight, _transformKnightPool, _autoExpendKnight);
     }
 
-    public Unit GetKnight() => _poolMonoKnight.GetFreeElement(); 
+    public Unit GetKnight() => _poolMonoKnight.GetFreeElement();
+
+    public List<Unit> GetAllActivateKnight() => _poolMonoKnight.GetAllActiveElements();
 }
