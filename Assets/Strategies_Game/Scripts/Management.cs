@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,18 +16,22 @@ public class Management : MonoBehaviour
     [SerializeField] private Camera _camera;
     [SerializeField] private Image _frameImage;
 
+    private SelectionState _currentSelectionState;
     private SelectableObject _hovered;
     private Vector2 _frameStart;
     private Vector2 _frameEnd;
     private List<SelectableObject> _listOfSelected = new List<SelectableObject>();
+    private CreatorUnit _creatorUnit; 
 
-   [SerializeField] private SelectionState _currentSelectionState;
-
-   private void Awake() {
+    private void Awake() {
        ServiceLocator.Instance.Register(this);
-   }
+    }
 
-   private void Update() {
+    private void Start() {
+        _creatorUnit = ServiceLocator.Instance.Get<CreatorUnit>();
+    }
+
+    private void Update() {
         RaycastToSelectable(out var hit);
 
         if (Input.GetMouseButtonUp(0)) {
@@ -101,14 +106,10 @@ public class Management : MonoBehaviour
     }
 
     private void SelectObjectToFrame(Rect rect) {
-        // Remove the Find method 
-        var allUnits = FindObjectsOfType<Unit>();
-        
-        foreach (var unit in allUnits) {
-            var screenPosition = _camera.WorldToScreenPoint(unit.transform.position);
-            if (rect.Contains(screenPosition)) {
-                Select(unit);
-            }
+        var allUnits = _creatorUnit.GetAllActivateKnight();
+
+        foreach (var unit in from unit in allUnits let screenPosition = _camera.WorldToScreenPoint(unit.transform.position) where rect.Contains(screenPosition) select unit) {
+            Select(unit);
         }
     }
 

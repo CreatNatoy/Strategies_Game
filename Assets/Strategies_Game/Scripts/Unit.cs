@@ -33,11 +33,12 @@ public class Unit : SelectableObject
     public bool TryKilled(int damageValue) {
         _health -= damageValue;
         _healthBarPrefab.SetHealth(_health,_maxHealth);
-        if (_health > 0) return false;
-        
-        Die();
-        return true;
+        if (_health <= 0) {
+            Die();
+            return true; 
+        }
 
+        return false; 
     }
 
     private void Die() {

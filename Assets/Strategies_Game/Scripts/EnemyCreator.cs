@@ -1,23 +1,23 @@
-using System;
 using UnityEngine;
 
 public class EnemyCreator : MonoBehaviour
 {
     [SerializeField] private Transform _spawnTransform;
-    [SerializeField] private float _creationPeriod;
-    [SerializeField] private Enemy _enemyPrefab;
+    [SerializeField] private int _sizeEnemy = 3;
 
-    private float _timer;
-
-    private void Update() {
+    private CreatorUnit _creatorUnit; 
+    
+    private void Start() {
+        _creatorUnit = ServiceLocator.Instance.Get<CreatorUnit>(); 
         CreateEnemy();
     }
 
     private void CreateEnemy() {
-        _timer += Time.deltaTime;
-        if (_timer > _creationPeriod) {
-            _timer -= _creationPeriod; 
-            Instantiate(_enemyPrefab, _spawnTransform.position, _spawnTransform.rotation);
+        for (var i = 0; i < _sizeEnemy; i++) {
+            var enemy = _creatorUnit.GetEnemy();
+            var position = _spawnTransform.position +
+                           new Vector3(Random.Range(-2f, 2f), 0f, Random.Range(-2f, 2f));
+            enemy.gameObject.transform.position = position;
         }
     }
 }
