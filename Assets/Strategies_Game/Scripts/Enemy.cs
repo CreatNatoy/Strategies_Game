@@ -66,18 +66,7 @@ public class Enemy : MonoBehaviour
             case EnemyState.Attack:
 
                 if (_targetUnit) {
-                    _navMeshAgent.SetDestination(_targetUnit.transform.position);
-
-                    var distance = Vector3.Distance(transform.position, _targetUnit.transform.position);
-                    if (distance > _distanceToAttack) {
-                        SetState(EnemyState.WalkToUnit);
-                    }
-
-                    _timer += Time.deltaTime;
-                    if (_timer > _attackPeriod) {
-                        _timer -= _attackPeriod;
-                        _targetUnit.TakeDamage(_damage);
-                    }
+                    Attack();
                 }
                 else {
                     SetState(EnemyState.WalkToBuilding);
@@ -86,6 +75,23 @@ public class Enemy : MonoBehaviour
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    private void Attack() {
+        _navMeshAgent.SetDestination(_targetUnit.transform.position);
+
+        var distance = Vector3.Distance(transform.position, _targetUnit.transform.position);
+        if (distance > _distanceToAttack) {
+            SetState(EnemyState.WalkToUnit);
+        }
+
+        _timer += Time.deltaTime;
+        if (_timer > _attackPeriod) {
+            _timer -= _attackPeriod;
+            if (_targetUnit.TryKilled(_damage)) {
+                SetState(EnemyState.Idle);
+            }
         }
     }
 

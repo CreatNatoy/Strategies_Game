@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -21,7 +20,8 @@ public class Unit : SelectableObject
         _healthBarPrefab = Instantiate(_healthBarPrefab);
         _healthBarPrefab.Setup(transform);
         
-
+        _serviceLocator = ServiceLocator.Instance;
+        _management = _serviceLocator.Get<Management>(); 
     }
     
     public override void WhenClickOnGround(Vector3 point) {
@@ -30,18 +30,20 @@ public class Unit : SelectableObject
         _navMeshAgent.SetDestination(point); 
     }
 
-    public void TakeDamage(int damageValue) {
+    public bool TryKilled(int damageValue) {
         _health -= damageValue;
         _healthBarPrefab.SetHealth(_health,_maxHealth);
-        if (_health <= 0) {
-            Destroy(gameObject);
-        }
+        if (_health > 0) return false;
+        
+        Die();
+        return true;
+
     }
 
-    private void OnDestroy() {
-        Debug.Log("Destroy");
-        _serviceLocator = ServiceLocator.Instance;
-        _management = _serviceLocator.Get<Management>(); 
+    private void Die() {
+        _health = _maxHealth;
+        _healthBarPrefab.SetHealth(_health, _maxHealth);
+        gameObject.SetActive(false);
         _management.Unselect(this);
     }
 }

@@ -51,18 +51,7 @@ public class Knight : Unit
                 case UnitState.Attack:
 
                     if (_targetEnemy) {
-                        _navMeshAgent.SetDestination(_targetEnemy.transform.position);
-
-                        var distance = Vector3.Distance(transform.position, _targetEnemy.transform.position);
-                        if (distance > _distanceToAttack) {
-                            SetState(UnitState.WalkToEnemy);
-                        }
-    
-                        _timer += Time.deltaTime;
-                        if (_timer > _attackPeriod) {
-                            _timer -= _attackPeriod;
-                            _targetEnemy.TakeDamage(_damage);
-                        }
+                        Attack();
                     }
                     else {
                         SetState(UnitState.WalkToPoint);
@@ -73,7 +62,22 @@ public class Knight : Unit
                     throw new ArgumentOutOfRangeException();
             }
         }
-    
+
+        private void Attack() {
+            _navMeshAgent.SetDestination(_targetEnemy.transform.position);
+
+            var distance = Vector3.Distance(transform.position, _targetEnemy.transform.position);
+            if (distance > _distanceToAttack) {
+                SetState(UnitState.WalkToEnemy);
+            }
+
+            _timer += Time.deltaTime;
+            if (_timer > _attackPeriod) {
+                _timer -= _attackPeriod;
+                _targetEnemy.TakeDamage(_damage);
+            }
+        }
+
         public void SetState(UnitState unitState) {
             _currentUnitState = unitState;
     
@@ -110,8 +114,12 @@ public class Knight : Unit
                 SetState(UnitState.WalkToEnemy);
             }
         }
-    
-    #if UNITY_EDITOR
+
+        private void OnDisable() {
+            SetState(UnitState.Idle);
+        }
+
+#if UNITY_EDITOR
         private void OnDrawGizmos() {
             Handles.color = Color.red;
             Handles.DrawWireDisc(transform.position, Vector3.up, _distanceToAttack);

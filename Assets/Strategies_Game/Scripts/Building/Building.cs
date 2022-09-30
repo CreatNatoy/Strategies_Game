@@ -13,7 +13,7 @@ public class Building : SelectableObject
     public int ZSize => _zSize;
     public int Price => _price;
 
-    private void Awake() {
+    public virtual void Awake() {
         _startColor = _renderer.material.color;
     }
 

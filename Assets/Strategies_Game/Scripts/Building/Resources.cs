@@ -20,7 +20,12 @@ public class Resources : MonoBehaviour
     public void SpendMoney(int spendMoney) {
         _money -= spendMoney;
         PrintMoney();
-    } 
+    }
+
+    public void AddCoin(int coin) {
+        _money += coin; 
+        PrintMoney();
+    }
 
     private void PrintMoney() => EventManager.PrintCoin(_money); 
 }
