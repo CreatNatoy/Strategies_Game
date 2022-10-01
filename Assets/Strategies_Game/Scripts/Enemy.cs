@@ -28,8 +28,11 @@ public class Enemy : MonoBehaviour
     private float _timer;
     private CreatorUnit _creatorUnit;
 
+    private void Awake() {
+        _maxHealth = _health;
+    }
+
     private void Start() {
-        _maxHealth = _health; 
         _healthBarPrefab = Instantiate(_healthBarPrefab);
         _healthBarPrefab.Setup(transform);
         
@@ -49,7 +52,7 @@ public class Enemy : MonoBehaviour
 
                 break;
             case EnemyState.WalkToUnit:
-                if (_targetUnit) {
+                if (_targetUnit.gameObject.activeSelf) {
                     _navMeshAgent.SetDestination(_targetUnit.transform.position);
                     var distance = Vector3.Distance(transform.position, _targetUnit.transform.position);
 
@@ -68,7 +71,7 @@ public class Enemy : MonoBehaviour
                 break;
             case EnemyState.Attack:
 
-                if (_targetUnit) {
+                if (_targetUnit.gameObject.activeSelf) {
                     Attack();
                 }
                 else {
@@ -121,7 +124,7 @@ public class Enemy : MonoBehaviour
 
     public void FindClosestBuilding() {
         // Remove the method Find
-        var allBuildings = FindObjectsOfType<Building>();
+    /*    var allBuildings = FindObjectsOfType<Building>();
 
         var minDistance = Mathf.Infinity;
 
@@ -132,7 +135,7 @@ public class Enemy : MonoBehaviour
                 minDistance = distance;
                 _targetBuilding = building;
             }
-        }
+        }*/
     }
 
     private void FindClosestUnit() {
@@ -158,9 +161,19 @@ public class Enemy : MonoBehaviour
         _health -= damageValue;
         _healthBarPrefab.SetHealth(_health,_maxHealth);
         if (_health <= 0) {
-            Destroy(gameObject);
+            Die();
         }
     }
+
+    private void Die() {
+        gameObject.SetActive(false);
+    }
+
+    public void ResetHealth() {
+        _health = _maxHealth;
+        _healthBarPrefab.SetHealth(_health,_maxHealth);
+    }
+    
 
 #if UNITY_EDITOR
     private void OnDrawGizmos() {

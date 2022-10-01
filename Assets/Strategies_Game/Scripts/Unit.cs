@@ -14,9 +14,12 @@ public class Unit : SelectableObject
     public NavMeshAgent _navMeshAgent;
     public int Price => _price;
 
+    private void Awake() {
+        _maxHealth = _health; 
+    }
+
     public override void Start() {
         base.Start();
-        _maxHealth = _health; 
         _healthBarPrefab = Instantiate(_healthBarPrefab);
         _healthBarPrefab.Setup(transform);
         
@@ -42,9 +45,12 @@ public class Unit : SelectableObject
     }
 
     private void Die() {
-        _health = _maxHealth;
-        _healthBarPrefab.SetHealth(_health, _maxHealth);
         gameObject.SetActive(false);
         _management.Unselect(this);
+    }
+
+    public void ResetHealth() {
+        _health = _maxHealth;
+        _healthBarPrefab.SetHealth(_health, _maxHealth);
     }
 }

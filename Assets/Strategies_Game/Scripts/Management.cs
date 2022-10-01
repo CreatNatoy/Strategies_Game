@@ -13,9 +13,9 @@ public enum SelectionState
 
 public class Management : MonoBehaviour
 {
-    [SerializeField] private Camera _camera;
     [SerializeField] private Image _frameImage;
 
+    private Camera _camera;
     private SelectionState _currentSelectionState;
     private SelectableObject _hovered;
     private Vector2 _frameStart;
@@ -29,6 +29,7 @@ public class Management : MonoBehaviour
 
     private void Start() {
         _creatorUnit = ServiceLocator.Instance.Get<CreatorUnit>();
+        _camera = Camera.main;
     }
 
     private void Update() {

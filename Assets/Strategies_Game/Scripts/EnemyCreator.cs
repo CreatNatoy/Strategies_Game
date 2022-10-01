@@ -15,6 +15,8 @@ public class EnemyCreator : MonoBehaviour
     private void CreateEnemy() {
         for (var i = 0; i < _sizeEnemy; i++) {
             var enemy = _creatorUnit.GetEnemy();
+            enemy.ResetHealth();
+            
             var position = _spawnTransform.position +
                            new Vector3(Random.Range(-2f, 2f), 0f, Random.Range(-2f, 2f));
             enemy.gameObject.transform.position = position;

@@ -31,6 +31,7 @@ public class Barack : Building
     public void CreateUnit(Unit unitPrefab) {
         var spawnPosition = _spawnTransform.position;
         var newUnit = _creatorUnit.GetKnight();
+        newUnit.ResetHealth();
         newUnit.gameObject.transform.position = spawnPosition;
        var position = spawnPosition +
                           new Vector3(Random.Range(-2f, 2f), 0f, Random.Range(-2f, 2f));

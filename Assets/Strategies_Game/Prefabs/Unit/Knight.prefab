@@ -248,7 +248,7 @@ MonoBehaviour:
   _healthBarPrefab: {fileID: 3079300989541850726, guid: f188a95206090a343832c045289b45a8, type: 3}
   _navMeshAgent: {fileID: 1635940456111041517}
   _distanceToFollow: 2
-  _distanceToAttack: 1
+  _distanceToAttack: 2
   _attackPeriod: 1
   _damage: 1
 --- !u!195 &1635940456111041517

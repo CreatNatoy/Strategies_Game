@@ -21,7 +21,13 @@ public class Knight : Unit
         private Vector3 _targetPoint;
         private Enemy _targetEnemy;
         private float _timer;
-    
+        private CreatorUnit _creatorUnit;
+        
+        public override void Start() {
+            base.Start();
+            _creatorUnit = ServiceLocator.Instance.Get<CreatorUnit>();
+        }
+
         private void Update() {
             switch (_currentUnitState) {
                 case UnitState.Idle:
@@ -31,7 +37,7 @@ public class Knight : Unit
                     FindClosestEnemy();
                     break;
                 case UnitState.WalkToEnemy:
-                    if (_targetEnemy) {
+                    if (_targetEnemy.gameObject.activeSelf) {
                         _navMeshAgent.SetDestination(_targetEnemy.transform.position);
                         var distance = Vector3.Distance(transform.position, _targetEnemy.transform.position);
     
@@ -50,7 +56,7 @@ public class Knight : Unit
                     break;
                 case UnitState.Attack:
 
-                    if (_targetEnemy) {
+                    if ( _targetEnemy.gameObject.activeSelf) {
                         Attack();
                     }
                     else {
@@ -97,8 +103,8 @@ public class Knight : Unit
 
         public void FindClosestEnemy() {
             // Remove the method Find
-            var allEnemies = FindObjectsOfType<Enemy>();
-    
+            var allEnemies = _creatorUnit.GetAllActivateEnemy();
+            
             var minDistance = Mathf.Infinity;
     
             foreach (var enemy in allEnemies) {
