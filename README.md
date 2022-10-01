@@ -8,11 +8,14 @@
 
 # Strategies_Game-RPG
  A strategy game. At an early stage (don't hit me). </br>
- `The next step is to remove all FIND and POOL implementation using generic`
+ ` There is not a single FIND in the project ` </br>
+ ` There is not a single GETCOMPONENT in the project, except for one case RAYCAST ` </br>
+ FIND, GETCOMPONENT, DESTROY, INSTANTIATE etc. these are not good for optimization, and they are best avoided.
  
 ## Used:
 * Service Locator
 * OOP
+* POOL implementation using generic
 * navMesh
 
 ## Controller game
