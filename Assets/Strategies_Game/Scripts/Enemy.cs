@@ -33,41 +33,46 @@ public class Enemy : MonoBehaviour
     }
 
     private void Start() {
-        _healthBarPrefab = Instantiate(_healthBarPrefab);
-        _healthBarPrefab.Setup(transform);
-        
+        InitHealthBar();
+
         _creatorUnit = ServiceLocator.Instance.Get<CreatorUnit>();
     }
 
     private void Update() {
+        HandlerState();
+    }
+
+    public void TakeDamage(int damageValue) {
+        _health -= damageValue;
+        _healthBarPrefab.SetHealth(_health,_maxHealth);
+        if (_health <= 0) {
+            Die();
+        }
+    }
+
+    public void ResetHealth() {
+        _health = _maxHealth;
+        _healthBarPrefab.SetHealth(_health,_maxHealth);
+    }
+
+    private void InitHealthBar() {
+        _healthBarPrefab = Instantiate(_healthBarPrefab);
+        _healthBarPrefab.Setup(transform);
+    }
+
+    private void HandlerState() {
         switch (_currentEnemyState) {
             case EnemyState.Idle:
                 FindClosestUnit();
                 break;
             case EnemyState.WalkToBuilding:
                 FindClosestUnit();
-                if (_targetBuilding == null) {
+                
+                if (_targetBuilding == null) 
                     SetState(EnemyState.Idle);
-                }
-
                 break;
             case EnemyState.WalkToUnit:
-                if (_targetUnit.gameObject.activeSelf) {
-                    _navMeshAgent.SetDestination(_targetUnit.transform.position);
-                    var distance = Vector3.Distance(transform.position, _targetUnit.transform.position);
-
-                    if (distance > _distanceToFollow) {
-                        SetState(EnemyState.WalkToBuilding);
-                    }
-
-                    if (distance < _distanceToAttack) {
-                        SetState(EnemyState.Attack);
-                    }
-                }
-                else {
-                    SetState(EnemyState.WalkToBuilding);
-                }
-
+                WalkToUnit();
                 break;
             case EnemyState.Attack:
 
@@ -81,6 +86,24 @@ public class Enemy : MonoBehaviour
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    private void WalkToUnit() {
+        if (_targetUnit.gameObject.activeSelf) {
+            _navMeshAgent.SetDestination(_targetUnit.transform.position);
+            var distance = Vector3.Distance(transform.position, _targetUnit.transform.position);
+
+            if (distance > _distanceToFollow) {
+                SetState(EnemyState.WalkToBuilding);
+            }
+
+            if (distance < _distanceToAttack) {
+                SetState(EnemyState.Attack);
+            }
+        }
+        else {
+            SetState(EnemyState.WalkToBuilding);
         }
     }
 
@@ -101,7 +124,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void SetState(EnemyState enemyState) {
+    private void SetState(EnemyState enemyState) {
         _currentEnemyState = enemyState;
 
         switch (_currentEnemyState) {
@@ -122,7 +145,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void FindClosestBuilding() {
+    private void FindClosestBuilding() {
         // Remove the method Find
     /*    var allBuildings = FindObjectsOfType<Building>();
 
@@ -156,24 +179,11 @@ public class Enemy : MonoBehaviour
             SetState(EnemyState.WalkToUnit);
         }
     }
-    
-    public void TakeDamage(int damageValue) {
-        _health -= damageValue;
-        _healthBarPrefab.SetHealth(_health,_maxHealth);
-        if (_health <= 0) {
-            Die();
-        }
-    }
 
     private void Die() {
         gameObject.SetActive(false);
     }
 
-    public void ResetHealth() {
-        _health = _maxHealth;
-        _healthBarPrefab.SetHealth(_health,_maxHealth);
-    }
-    
 
 #if UNITY_EDITOR
     private void OnDrawGizmos() {

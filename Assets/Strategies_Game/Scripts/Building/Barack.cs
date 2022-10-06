@@ -28,7 +28,7 @@ public class Barack : Building
         _menuObject.SetActive(false);
     }
 
-    public void CreateUnit(Unit unitPrefab) {
+    public void CreateUnit() {
         var spawnPosition = _spawnTransform.position;
         var newUnit = _creatorUnit.GetKnight();
         newUnit.ResetHealth();

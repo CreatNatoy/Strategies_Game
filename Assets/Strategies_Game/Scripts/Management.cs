@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -35,38 +34,43 @@ public class Management : MonoBehaviour
     private void Update() {
         RaycastToSelectable(out var hit);
 
+        HandlerMouse(hit);
+
+        HandlerFrameSelected();
+    }
+
+    private void HandlerMouse(RaycastHit hit) {
         if (Input.GetMouseButtonUp(0)) {
             if (_hovered) {
                 if (Input.GetKey(KeyCode.LeftControl) == false)
                     UnselectAll();
-                _currentSelectionState = SelectionState.UnitsSelected; 
+                _currentSelectionState = SelectionState.UnitsSelected;
                 Select(_hovered);
             }
 
             if (_currentSelectionState == SelectionState.UnitsSelected) {
                 if (hit.collider.CompareTag("Ground")) {
-
-                    var rowNumber = Mathf.CeilToInt(Mathf.Sqrt(_listOfSelected.Count));
-                    
-                    for (var i = 0; i < _listOfSelected.Count; i++) {
-                        
-                        var row = i / rowNumber;
-                        var column = i % rowNumber; 
-                        
-                        var point = hit.point + new Vector3(row, 0f, column);
-                        
-                        _listOfSelected[i].WhenClickOnGround(point);
-                    }
+                    MoveUnit(hit);
                 }
             }
-
         }
 
         if (Input.GetMouseButtonUp(1)) {
             UnselectAll();
         }
+    }
 
-        HandlerFrameSelected();
+    private void MoveUnit(RaycastHit hit) {
+        var rowNumber = Mathf.CeilToInt(Mathf.Sqrt(_listOfSelected.Count));
+
+        for (var i = 0; i < _listOfSelected.Count; i++) {
+            var row = i / rowNumber;
+            var column = i % rowNumber;
+
+            var point = hit.point + new Vector3(row, 0f, column);
+
+            _listOfSelected[i].WhenClickOnGround(point);
+        }
     }
 
     private void HandlerFrameSelected() {
@@ -171,9 +175,9 @@ public class Management : MonoBehaviour
     }
 
     private void UnhoverCurrent() {
-        if (_hovered) {
-            _hovered.OnUnhover();
-            _hovered = null;
-        }
+        if (!_hovered) return;
+        
+        _hovered.OnUnhover();
+        _hovered = null;
     }
 }

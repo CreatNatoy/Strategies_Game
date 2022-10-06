@@ -23,7 +23,7 @@ public class UnitButton : MonoBehaviour
         if (_resources.Money < price) return;
         
         _resources.SpendMoney(price);
-        _barack.CreateUnit(_unitPrefab); 
+        _barack.CreateUnit(); 
 
     }
 }

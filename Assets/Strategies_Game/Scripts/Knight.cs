@@ -29,6 +29,10 @@ public class Knight : Unit
         }
 
         private void Update() {
+            HandlerState();
+        }
+
+        private void HandlerState() {
             switch (_currentUnitState) {
                 case UnitState.Idle:
                     FindClosestEnemy();
@@ -37,35 +41,38 @@ public class Knight : Unit
                     FindClosestEnemy();
                     break;
                 case UnitState.WalkToEnemy:
-                    if (_targetEnemy.gameObject.activeSelf) {
-                        _navMeshAgent.SetDestination(_targetEnemy.transform.position);
-                        var distance = Vector3.Distance(transform.position, _targetEnemy.transform.position);
-    
-                        if (distance > _distanceToFollow) {
-                            SetState(UnitState.WalkToPoint);
-                        }
-    
-                        if (distance < _distanceToAttack) {
-                            SetState(UnitState.Attack);
-                        }
-                    }
-                    else {
-                        SetState(UnitState.WalkToPoint);
-                    }
-    
+                    WalkToEnemy();
                     break;
                 case UnitState.Attack:
 
-                    if ( _targetEnemy.gameObject.activeSelf) {
+                    if (_targetEnemy.gameObject.activeSelf) {
                         Attack();
                     }
                     else {
                         SetState(UnitState.WalkToPoint);
                     }
-    
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void WalkToEnemy() {
+            if (_targetEnemy.gameObject.activeSelf) {
+                _navMeshAgent.SetDestination(_targetEnemy.transform.position);
+                var distance = Vector3.Distance(transform.position, _targetEnemy.transform.position);
+
+                if (distance > _distanceToFollow) {
+                    SetState(UnitState.WalkToPoint);
+                }
+
+                if (distance < _distanceToAttack) {
+                    SetState(UnitState.Attack);
+                }
+            }
+            else {
+                SetState(UnitState.WalkToPoint);
             }
         }
 
@@ -102,7 +109,6 @@ public class Knight : Unit
         }
 
         public void FindClosestEnemy() {
-            // Remove the method Find
             var allEnemies = _creatorUnit.GetAllActivateEnemy();
             
             var minDistance = Mathf.Infinity;
